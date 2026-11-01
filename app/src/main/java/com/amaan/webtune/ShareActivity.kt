@@ -14,6 +14,8 @@ import android.widget.*
 
 class ShareActivity : Activity() {
     private lateinit var url: String
+    private var border: RgbBorder? = null
+    override fun onDestroy() { border?.stop(); super.onDestroy() }
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 
     private fun grad(r: Int) = GradientDrawable(
@@ -56,13 +58,9 @@ class ShareActivity : Activity() {
         val sheet = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             isClickable = true
-            setPadding(dp(18), dp(18), dp(18), dp(24))
-            background = GradientDrawable().apply {
-                setColor(0xFF120D24.toInt())
-                val r = dp(28).toFloat()
-                cornerRadii = floatArrayOf(r, r, r, r, 0f, 0f, 0f, 0f)
-                setStroke(dp(1), 0x55FF2BD6)
-            }
+            setPadding(dp(28), dp(28), dp(28), dp(32))
+            background = RgbBorder(dp(28).toFloat(), dp(8).toFloat(), dp(3).toFloat())
+                .also { border = it; it.start() }
         }
         root.addView(sheet, FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
