@@ -1,48 +1,100 @@
 <!DOCTYPE html><meta name=viewport content="width=device-width,initial-scale=1">
 <title>Web Tune</title>
 <style>
-body{margin:0;min-height:100vh;background:#07050f;color:#fff;font-family:system-ui;
-display:flex;flex-direction:column;align-items:center;padding:24px}
-h1{font-size:38px;color:#0ff;text-shadow:0 0 12px #0ff,0 0 32px #f0f}
-.card{width:100%;max-width:420px;background:#120d24;border:1px solid #f0f6;
-border-radius:20px;padding:20px;box-shadow:0 0 28px #f0f4;box-sizing:border-box}
-input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #0ff;
-background:#07050f;color:#fff;font-size:16px}
-.row{display:flex;gap:10px;margin:14px 0}
-.tab{flex:1;padding:12px;border-radius:12px;border:1px solid #f0f;background:none;color:#f0f;font-size:16px}
-.tab.on{background:#f0f;color:#000;box-shadow:0 0 16px #f0f}
-#go{width:100%;padding:16px;border:0;border-radius:14px;font-size:18px;font-weight:700;
-background:linear-gradient(90deg,#0ff,#f0f);color:#000;box-shadow:0 0 22px #0ff8}
-#go:disabled{opacity:.5}
-#bar{height:8px;border-radius:8px;background:#07050f;margin-top:16px;overflow:hidden;display:none}
-#fill{height:100%;width:0;background:linear-gradient(90deg,#0ff,#f0f);box-shadow:0 0 12px #0ff;transition:width .3s}
-#msg{margin-top:14px;text-align:center;color:#0ff;word-break:break-word}
-select{background:#120d24;color:#0ff;border:1px solid #0ff;border-radius:8px;padding:6px;margin-bottom:10px}
+:root{--a:#00f0ff;--b:#ff2bd6;--bg:#07050f}
+[data-t=aurora]{--a:#7c5cff;--b:#22d3ee;--bg:#0b1020}
+[data-t=sunset]{--a:#ff7a45;--b:#ff3d81;--bg:#1a0b14}
+[data-t=emerald]{--a:#10e5a0;--b:#3b82f6;--bg:#06140f}
+[data-t=gold]{--a:#f5c451;--b:#ff9d2e;--bg:#0e0c08}
+*{-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:var(--bg);color:#fff;font-family:system-ui,sans-serif;
+display:flex;flex-direction:column;align-items:center;padding:22px 18px;box-sizing:border-box;
+overflow-x:hidden;transition:background .5s}
+.blob{position:fixed;width:300px;height:300px;border-radius:50%;filter:blur(90px);opacity:.45;z-index:-1;
+animation:fl 12s ease-in-out infinite alternate}
+.b1{background:var(--a);top:-80px;left:-90px}
+.b2{background:var(--b);bottom:-90px;right:-90px;animation-delay:-6s}
+@keyframes fl{to{transform:translate(70px,60px) scale(1.2)}}
+.top{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center}
+select{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);
+border-radius:20px;padding:7px 12px;font-size:14px;outline:none}
+select option{color:#000}
+.dots{display:flex;gap:9px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.dot.on{border-color:#fff;transform:scale(1.15);box-shadow:0 0 10px #fff8}
+.logo{margin:26px 0 4px;width:74px;height:74px;border-radius:24px;display:grid;place-items:center;
+background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 0 34px var(--a);font-size:36px}
+h1{margin:6px 0 0;font-size:34px;letter-spacing:1px;
+background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;color:transparent}
+.sub{opacity:.6;font-size:13px;margin-bottom:22px}
+.card{width:100%;max-width:420px;box-sizing:border-box;padding:20px;border-radius:26px;
+background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 50px #0007}
+.inp{display:flex;gap:8px}
+input{flex:1;min-width:0;padding:15px;border-radius:15px;border:1px solid rgba(255,255,255,.18);
+background:rgba(0,0,0,.35);color:#fff;font-size:15px;outline:none}
+input:focus{border-color:var(--a);box-shadow:0 0 14px color-mix(in srgb,var(--a) 50%,transparent)}
+.pb{border:0;border-radius:15px;padding:0 16px;font-size:14px;font-weight:600;color:#000;
+background:var(--a)}
+.seg{display:flex;margin:16px 0;padding:5px;border-radius:17px;background:rgba(0,0,0,.35)}
+.tab{flex:1;padding:12px;border:0;border-radius:13px;background:none;color:#fff9;font-size:15px;
+font-weight:600;transition:.3s}
+.tab.on{color:#000;background:linear-gradient(90deg,var(--a),var(--b));
+box-shadow:0 4px 18px color-mix(in srgb,var(--a) 55%,transparent)}
+#go{width:100%;padding:17px;border:0;border-radius:17px;font-size:17px;font-weight:800;color:#000;
+background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 8px 28px color-mix(in srgb,var(--a) 45%,transparent)}
+#go:active{transform:scale(.97)}
+#go:disabled{opacity:.55}
+#bar{height:9px;border-radius:9px;background:rgba(0,0,0,.4);margin-top:18px;overflow:hidden;display:none}
+#fill{height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--a),var(--b));
+box-shadow:0 0 14px var(--a);transition:width .3s}
+#msg{margin-top:14px;text-align:center;font-size:14px;white-space:pre-line;word-break:break-word;color:var(--a)}
+.note{margin-top:14px;font-size:12px;opacity:.55;text-align:center;max-width:380px}
+.foot{margin-top:auto;padding-top:28px;font-size:13px;opacity:.8}
+.foot b{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;color:transparent}
 </style>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div class=top>
 <select id=lang onchange=L()><option>English<option>हिन्दी<option>اردو</select>
+<div class=dots id=dots></div>
+</div>
+<div class=logo>🎧</div>
 <h1>Web Tune</h1>
+<div class=sub id=sub></div>
 <div class=card>
-<input id=url placeholder="">
-<div class=row><button class="tab on" id=v onclick="M('video')"></button>
+<div class=inp><input id=url><button class=pb id=pb onclick=P()></button></div>
+<div class=seg><button class="tab on" id=v onclick="M('video')"></button>
 <button class=tab id=a onclick="M('audio')"></button></div>
 <button id=go onclick=G()></button>
 <div id=bar><div id=fill></div></div>
-<div id=msg></div></div>
+<div id=msg></div>
+</div>
+<div class=note id=note></div>
+<div class=foot>Made with ♥ by <b>Amaan</b></div>
 <script>
-const T={English:["Paste YouTube / Instagram link","🎬 Video","🎵 Audio","Download","Downloading…","Saved ✔ ","Saved in Downloads/WebTune"],
-"हिन्दी":["लिंक पेस्ट करें","🎬 वीडियो","🎵 ऑडियो","डाउनलोड","डाउनलोड हो रहा है…","सेव हो गया ✔ ","Downloads/WebTune में सेव"],
-"اردو":["لنک پیسٹ کریں","🎬 ویڈیو","🎵 آڈیو","ڈاؤن لوڈ","ڈاؤن لوڈ ہو رہا ہے…","محفوظ ہو گیا ✔ ","Downloads/WebTune میں محفوظ"]};
+const T={English:["Paste YouTube / Instagram link","🎬 Video","🎵 Audio","Download","Downloading…","Saved ✔ ","Saved in Downloads/WebTune","Paste","YouTube • Instagram • Video & Audio","Download continues in background with notification"],
+"हिन्दी":["लिंक पेस्ट करें","🎬 वीडियो","🎵 ऑडियो","डाउनलोड","डाउनलोड हो रहा है…","सेव हो गया ✔ ","Downloads/WebTune में सेव","पेस्ट","YouTube • Instagram • वीडियो और ऑडियो","डाउनलोड नोटिफिकेशन के साथ बैकग्राउंड में चलता है"],
+"اردو":["لنک پیسٹ کریں","🎬 ویڈیو","🎵 آڈیو","ڈاؤن لوڈ","ڈاؤن لوڈ ہو رہا ہے…","محفوظ ہو گیا ✔ ","Downloads/WebTune میں محفوظ","پیسٹ","YouTube • Instagram • ویڈیو اور آڈیو","ڈاؤن لوڈ نوٹیفکیشن کے ساتھ بیک گراؤنڈ میں چلتا ہے"]};
+const TH={neon:"#00f0ff,#ff2bd6",aurora:"#7c5cff,#22d3ee",sunset:"#ff7a45,#ff3d81",emerald:"#10e5a0,#3b82f6",gold:"#f5c451,#ff9d2e"};
 let mode="video";
-function L(){const t=T[lang.value];url.placeholder=t[0];v.textContent=t[1];a.textContent=t[2];
-go.textContent=t[3];document.body.dir=lang.value=="اردو"?"rtl":"ltr"}
+function S(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function R(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function theme(n){document.documentElement.dataset.t=n;S("th",n);
+document.querySelectorAll(".dot").forEach(d=>d.classList.toggle("on",d.dataset.n==n))}
+for(const n in TH){const d=document.createElement("div");d.className="dot";d.dataset.n=n;
+d.style.background="linear-gradient(135deg,"+TH[n]+")";d.onclick=()=>theme(n);dots.appendChild(d)}
+function L(){const t=T[lang.value];S("lg",lang.value);url.placeholder=t[0];v.textContent=t[1];a.textContent=t[2];
+go.textContent=t[3];pb.textContent=t[7];sub.textContent=t[8];note.textContent=t[9];
+document.body.dir=lang.value=="اردو"?"rtl":"ltr"}
 function M(m){mode=m;v.classList.toggle("on",m=="video");a.classList.toggle("on",m=="audio")}
 function setUrl(u){url.value=u}
+function P(){try{url.value=Android.paste()}catch(e){}}
 function G(){if(!url.value.trim())return;const t=T[lang.value];
 go.disabled=true;msg.textContent=t[4];bar.style.display="block";fill.style.width="3%";
 Android.start(url.value,mode)}
-function onProg(p){fill.style.width=Math.max(p,3)+"%"}
+function onProg(p){fill.style.width=Math.max(p,3)+"%";msg.textContent=T[lang.value][4]+" "+p+"%"}
 function onDone(n){go.disabled=false;fill.style.width="100%";const t=T[lang.value];
 msg.textContent=t[5]+n+"\n"+t[6]}
 function onErr(e){go.disabled=false;bar.style.display="none";msg.textContent="❌ "+e}
-L();
+lang.value=R("lg")||"English";theme(R("th")||"neon");L();
 </script>
