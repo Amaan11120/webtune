@@ -70,13 +70,13 @@ class DownloadService : Service() {
             tmp.mkdirs()
             val req = YoutubeDLRequest(url.trim())
             req.addOption("-o", tmp.absolutePath + "/%(title).80s.%(ext)s")
-            req.addOption("--no-playlist"); req.addOption("-N", "4"); req.addOption("--no-mtime")
+            req.addOption("--no-playlist"); req.addOption("-N", "4"); req.addOption("--no-mtime"); req.addOption("-N", "4"); req.addOption("--no-mtime")
             if (mode == "audio") {
                 req.addOption("-x")
                 req.addOption("--audio-format", "mp3")
                 req.addOption("--audio-quality", "0")
             } else {
-                req.addOption("-f", "bv*[height<=720]+ba/b[height<=720]/b")
+                val h = mode.substringAfter(":", "720"); req.addOption("-f", "bv*[height<=$h]+ba/b[height<=$h]/b")
                 req.addOption("--merge-output-format", "mp4")
             }
             var last = -1

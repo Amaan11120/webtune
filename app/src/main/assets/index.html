@@ -41,6 +41,7 @@ background:var(--a)}
 font-weight:600;transition:.3s}
 .tab.on{color:#000;background:linear-gradient(90deg,var(--a),var(--b));
 box-shadow:0 4px 18px color-mix(in srgb,var(--a) 55%,transparent)}
+.q{display:flex;gap:8px;margin-bottom:16px}.qb{flex:1;padding:10px 0;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:#fff9;font-size:14px;font-weight:600}.qb.on{color:#000;background:var(--a);border-color:transparent}
 #go{width:100%;padding:17px;border:0;border-radius:17px;font-size:17px;font-weight:800;color:#000;
 background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 8px 28px color-mix(in srgb,var(--a) 45%,transparent)}
 #go:active{transform:scale(.97)}
@@ -65,6 +66,7 @@ box-shadow:0 0 14px var(--a);transition:width .3s}
 <div class=inp><input id=url><button class=pb id=pb onclick=P()></button></div>
 <div class=seg><button class="tab on" id=v onclick="M('video')"></button>
 <button class=tab id=a onclick="M('audio')"></button></div>
+<div class=q id=q></div>
 <button id=go onclick=G()></button>
 <div id=bar><div id=fill></div></div>
 <div id=msg></div>
@@ -86,15 +88,19 @@ d.style.background="linear-gradient(135deg,"+TH[n]+")";d.onclick=()=>theme(n);do
 function L(){const t=T[lang.value];S("lg",lang.value);url.placeholder=t[0];v.textContent=t[1];a.textContent=t[2];
 go.textContent=t[3];pb.textContent=t[7];sub.textContent=t[8];note.textContent=t[9];
 document.body.dir=lang.value=="اردو"?"rtl":"ltr"}
-function M(m){mode=m;v.classList.toggle("on",m=="video");a.classList.toggle("on",m=="audio")}
+function M(m){mode=m;q.style.display=m=="audio"?"none":"flex";v.classList.toggle("on",m=="video");a.classList.toggle("on",m=="audio")}
 function setUrl(u){url.value=u}
 function P(){try{url.value=Android.paste()}catch(e){}}
 function G(){if(!url.value.trim())return;const t=T[lang.value];
 go.disabled=true;msg.textContent=t[4];bar.style.display="block";fill.style.width="3%";
-Android.start(url.value,mode)}
+Android.start(url.value,mode=="audio"?"audio":"video:"+(qual||9999))}
 function onProg(p){fill.style.width=Math.max(p,3)+"%";msg.textContent=T[lang.value][4]+" "+p+"%"}
 function onDone(n){go.disabled=false;fill.style.width="100%";const t=T[lang.value];
 msg.textContent=t[5]+n+"\n"+t[6]}
 function onErr(e){go.disabled=false;bar.style.display="none";msg.textContent="❌ "+e}
+let qual=+(R("q")||720);
+function QH(){document.querySelectorAll(".qb").forEach(x=>x.classList.toggle("on",+x.dataset.h==qual))}
+[360,480,720,1080,0].forEach(h=>{const b=document.createElement("button");b.className="qb";b.dataset.h=h;b.textContent=h?h+"p":"Best";b.onclick=()=>{qual=h;S("q",h);QH()};q.appendChild(b)});
+QH();
 lang.value=R("lg")||"English";theme(R("th")||"neon");L();
 </script>
