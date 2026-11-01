@@ -17,19 +17,20 @@ class App : Application() {
             try {
                 YoutubeDL.getInstance().init(this)
                 FFmpeg.getInstance().init(this)
-                val sp = getSharedPreferences("wt", MODE_PRIVATE)
-                val now = System.currentTimeMillis()
-                if (now - sp.getLong("upd", 0) > 12 * 3600 * 1000L) {
-                    try {
-                        YoutubeDL.getInstance().updateYoutubeDL(this)
-                        sp.edit().putLong("upd", now).apply()
-                    } catch (e: Exception) { }
-                }
             } catch (e: Exception) {
                 err = e.message ?: "Init error"
             } finally {
                 ready.countDown()
             }
+            // update alag thread me, download ko block nahi karega
+            try {
+                val sp = getSharedPreferences("wt", MODE_PRIVATE)
+                val now = System.currentTimeMillis()
+                if (err == null && now - sp.getLong("upd", 0) > 24 * 3600 * 1000L) {
+                    YoutubeDL.getInstance().updateYoutubeDL(this)
+                    sp.edit().putLong("upd", now).apply()
+                }
+            } catch (e: Exception) { }
         }.start()
     }
 }

@@ -32,7 +32,7 @@ class DownloadService : Service() {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.createNotificationChannel(
             NotificationChannel(ch, "Downloads", NotificationManager.IMPORTANCE_LOW))
-        startForeground(1, progress("Starting…", 0),
+        startForeground(1, progress("Fetching video info…", 0),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
         pending.incrementAndGet()
         exec.execute { work(url, mode) }
@@ -70,7 +70,7 @@ class DownloadService : Service() {
             tmp.mkdirs()
             val req = YoutubeDLRequest(url.trim())
             req.addOption("-o", tmp.absolutePath + "/%(title).80s.%(ext)s")
-            req.addOption("--no-playlist"); req.addOption("-N", "4"); req.addOption("--no-mtime"); req.addOption("-N", "4"); req.addOption("--no-mtime")
+            req.addOption("--no-playlist"); req.addOption("-N", "8"); req.addOption("--http-chunk-size", "10M"); req.addOption("--no-warnings"); req.addOption("--no-mtime"); req.addOption("-N", "4"); req.addOption("--no-mtime")
             if (mode == "audio") {
                 req.addOption("-x")
                 req.addOption("--audio-format", "mp3")
