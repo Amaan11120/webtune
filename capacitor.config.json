@@ -1,0 +1,9 @@
+{
+  "appId": "com.amaan.webtune",
+  "appName": "Web Tune",
+  "webDir": "www",
+  "server": {
+    "url": "http://localhost:8080",
+    "cleartext": true
+  }
+}
