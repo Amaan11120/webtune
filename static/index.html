@@ -1,0 +1,40 @@
+<!DOCTYPE html><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Web Tune</title>
+<style>
+body{margin:0;min-height:100vh;background:#07050f;color:#fff;font-family:system-ui;
+display:flex;flex-direction:column;align-items:center;padding:24px}
+h1{font-size:38px;color:#0ff;text-shadow:0 0 12px #0ff,0 0 32px #f0f}
+.card{width:100%;max-width:420px;background:#120d24;border:1px solid #f0f6;
+border-radius:20px;padding:20px;box-shadow:0 0 28px #f0f4}
+input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #0ff;
+background:#07050f;color:#fff;font-size:16px}
+.row{display:flex;gap:10px;margin:14px 0}
+.tab{flex:1;padding:12px;border-radius:12px;border:1px solid #f0f;background:none;
+color:#f0f;font-size:16px}
+.tab.on{background:#f0f;color:#000;box-shadow:0 0 16px #f0f}
+#go{width:100%;padding:16px;border:0;border-radius:14px;font-size:18px;font-weight:700;
+background:linear-gradient(90deg,#0ff,#f0f);color:#000;box-shadow:0 0 22px #0ff8}
+#msg{margin-top:14px;text-align:center;color:#0ff;word-break:break-word}
+select{background:#120d24;color:#0ff;border:1px solid #0ff;border-radius:8px;padding:6px;margin-bottom:10px}
+</style>
+<select id=lang onchange=L()><option>English<option>हिन्दी<option>اردو</select>
+<h1>Web Tune</h1>
+<div class=card>
+<input id=url placeholder="">
+<div class=row><button class="tab on" id=v onclick="M('video')"></button>
+<button class=tab id=a onclick="M('audio')"></button></div>
+<button id=go onclick=G()></button><div id=msg></div></div>
+<script>
+const T={English:["Paste YouTube / Instagram link","🎬 Video","🎵 Audio","Download","Downloading…","Saved ✔ "],
+"हिन्दी":["लिंक पेस्ट करें","🎬 वीडियो","🎵 ऑडियो","डाउनलोड","डाउनलोड हो रहा है…","सेव हो गया ✔ "],
+"اردو":["لنک پیسٹ کریں","🎬 ویڈیو","🎵 آڈیو","ڈاؤن لوڈ","ڈاؤن لوڈ ہو رہا ہے…","محفوظ ہو گیا ✔ "]};
+let mode="video";
+function L(){const t=T[lang.value];url.placeholder=t[0];v.textContent=t[1];a.textContent=t[2];
+go.textContent=t[3];document.body.dir=lang.value=="اردو"?"rtl":"ltr"}
+function M(m){mode=m;v.classList.toggle("on",m=="video");a.classList.toggle("on",m=="audio")}
+async function G(){const t=T[lang.value];msg.textContent=t[4];
+const r=await(await fetch("/dl",{method:"POST",headers:{"Content-Type":"application/json"},
+body:JSON.stringify({url:url.value,mode})})).json();
+msg.textContent=r.ok?t[5]+r.title:"❌ "+r.error}
+L();
+</script>
