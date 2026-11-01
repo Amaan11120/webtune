@@ -42,9 +42,9 @@ class ShareActivity : Activity() {
 
     override fun onCreate(s: Bundle?) {
         super.onCreate(s)
-        val text = intent.getStringExtra(Intent.EXTRA_TEXT)
-        if (text.isNullOrBlank()) { finish(); return }
-        url = Regex("https?://\\S+").find(text)?.value ?: text.trim()
+        val shared = intent.getStringExtra(Intent.EXTRA_TEXT)
+        if (shared.isNullOrBlank()) { finish(); return }
+        url = Regex("https?://\\S+").find(shared)?.value ?: shared.trim()
         if (Build.VERSION.SDK_INT >= 33) {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
         }
