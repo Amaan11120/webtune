@@ -65,13 +65,12 @@ class DownloadService : Service() {
 
     private fun work(url: String, mode: String) {
         try {
-            YoutubeDL.getInstance().init(application)
-            FFmpeg.getInstance().init(application)
+            App.ready.await(); App.err?.let { throw Exception(it) }
             val tmp = File(cacheDir, "dl" + System.currentTimeMillis())
             tmp.mkdirs()
             val req = YoutubeDLRequest(url.trim())
             req.addOption("-o", tmp.absolutePath + "/%(title).80s.%(ext)s")
-            req.addOption("--no-playlist")
+            req.addOption("--no-playlist"); req.addOption("-N", "4"); req.addOption("--no-mtime")
             if (mode == "audio") {
                 req.addOption("-x")
                 req.addOption("--audio-format", "mp3")

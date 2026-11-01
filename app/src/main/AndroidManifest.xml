@@ -5,6 +5,7 @@
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
   <application
+      android:name=".App"
       android:label="Web Tune"
       android:extractNativeLibs="true"
       android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
